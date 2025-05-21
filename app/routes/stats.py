@@ -43,3 +43,4 @@ def get_stats():
             print(f"Erreur avec {repo_info['repo']} : {e}")
 
     return jsonify(stats_data)
+

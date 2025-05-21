@@ -16,3 +16,17 @@ def lire_repos():
     except Exception as e:
         print(f"Erreur lors de la lecture du fichier JSON : {e}")
         return []
+
+def lire_tds():
+    try:
+        with open("data/tds.json", "r") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Erreur lecture tds.json : {e}")
+        return {}
+
+
+def lire_groupes():
+    import json
+    with open("data/groupes.json", "r") as f:
+        return json.load(f)

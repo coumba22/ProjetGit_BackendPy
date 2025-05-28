@@ -3,13 +3,17 @@ from github import Github
 from app.utils import lire_repos
 import os
 from collections import defaultdict
+from dotenv import load_dotenv
 
 
 github_api = Blueprint('github_api', __name__)
 
 # Récupération du token depuis les variables d'environnement
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "REMOVED")
-g = Github(GITHUB_TOKEN)
+#GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "REMOVED")
+#g = Github(GITHUB_TOKEN)
+
+load_dotenv()
+g = Github(os.getenv("GITHUB_TOKEN"))
 
 # Route API pour récupérer les commits d'un seul repo
 @github_api.route('/commits', methods=['GET'])

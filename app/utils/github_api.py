@@ -1,8 +1,16 @@
 from github import Github
 from app.utils import lire_repos  # fonction qui lit repos.json
 
-GITHUB_TOKEN = "REMOVED"
-g = Github(GITHUB_TOKEN)
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+g = Github(os.getenv("GITHUB_TOKEN"))
+
+
+#GITHUB_TOKEN = "REMOVED"
+#g = Github(GITHUB_TOKEN)
 
 def get_stats_for_repos():
     repos = lire_repos()  # liste de dict {owner, repo}

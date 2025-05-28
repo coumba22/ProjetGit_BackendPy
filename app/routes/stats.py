@@ -1,14 +1,20 @@
 from flask import Blueprint, jsonify
 from github import Github
 from app.utils import lire_repos
+import os
+from dotenv import load_dotenv
 
 stats_api = Blueprint('stats_api', __name__)
 
-GITHUB_TOKEN = "REMOVED"
+#GITHUB_TOKEN = "REMOVED"
+
+load_dotenv()
+#g = Github(os.getenv("GITHUB_TOKEN"))
 
 @stats_api.route('/stats', methods=['GET'])
 def get_stats():
-    g = Github(GITHUB_TOKEN)
+    #g = Github(GITHUB_TOKEN)
+    g = Github(os.getenv("GITHUB_TOKEN"))
     repos = lire_repos()
 
     stats_data = {

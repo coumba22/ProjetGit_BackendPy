@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 from app.routes.indicateurs import indicateurs_api
 from flask_cors import CORS
+from app.routes.gitstats import gitstats_api
 
 
 # Charger les variables d'environnement depuis .env
@@ -30,6 +31,7 @@ app.register_blueprint(auth, url_prefix='/auth')
 app.register_blueprint(github_api, url_prefix='/api')
 app.register_blueprint(stats_api, url_prefix='/api')
 app.register_blueprint(indicateurs_api, url_prefix='/api')
+app.register_blueprint(gitstats_api)
 
 
 @app.route('/')

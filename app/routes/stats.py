@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 stats_api = Blueprint('stats_api', __name__)
 
-#GITHUB_TOKEN = "REMOVED"
 
 load_dotenv()
 #g = Github(os.getenv("GITHUB_TOKEN"))

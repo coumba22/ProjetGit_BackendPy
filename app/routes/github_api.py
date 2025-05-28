@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 github_api = Blueprint('github_api', __name__)
 
 # Récupération du token depuis les variables d'environnement
-#GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "REMOVED")
 #g = Github(GITHUB_TOKEN)
 
 load_dotenv()

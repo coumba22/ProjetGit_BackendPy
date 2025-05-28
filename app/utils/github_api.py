@@ -9,7 +9,6 @@ load_dotenv()
 g = Github(os.getenv("GITHUB_TOKEN"))
 
 
-#GITHUB_TOKEN = "REMOVED"
 #g = Github(GITHUB_TOKEN)
 
 def get_stats_for_repos():

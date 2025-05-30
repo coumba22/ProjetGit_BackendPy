@@ -8,5 +8,12 @@
     "TD2": {
         "repo": "https://github.com/uha-fr/archiweb_2025_tds_gr1_ndeye-coumba.diagne_webapp",
         "deadline": "2025-05-12T23:59:00"
+    },
+
+    "TD3": {
+        "repo": "https://github.com/uha-fr/archiweb_2025_projets_gr03.git",
+        "deadline": "2025-05-12T23:59:00"
     }
+
+
 }

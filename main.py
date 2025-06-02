@@ -31,7 +31,7 @@ app.register_blueprint(auth, url_prefix='/auth')
 app.register_blueprint(github_api, url_prefix='/api')
 app.register_blueprint(stats_api, url_prefix='/api')
 app.register_blueprint(indicateurs_api, url_prefix='/api')
-app.register_blueprint(gitstats_api)
+app.register_blueprint(gitstats_api, url_prefix='/api')
 
 
 @app.route('/')

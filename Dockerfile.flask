@@ -1,9 +1,20 @@
 FROM python:3.11-slim
 
+# Installer git
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
+# Copier le code de ton api
 COPY . .
+
+# Installer les dépendances Python (exemple)
+RUN pip install -r requirements.txt
+
+# Cloner gitstats dans /opt/gitstats (ou copier localement)
+RUN git clone https://github.com/a-p-z/gitstats.git /opt/gitstats
+
+# Rendre le script python exécutable
+RUN chmod +x /opt/gitstats/gitstats.py
+
+CMD [ "python", "main.py" ]

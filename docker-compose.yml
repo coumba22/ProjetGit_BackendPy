@@ -33,9 +33,8 @@ services:
       - archeologist-db
     ports:
       - "3000:3000"
-    env-file:
-      - .env
-
+    environment:
+      
     working_dir: /app/backend
     command: /bin/sh -c "npm install && npm start"
 

@@ -1,19 +1,14 @@
 {
-    "TD1": {
-        "repo": "https://github.com/coumba22/Projet_GIT_frontend",
+    "1": {
+        "repo": "https://github.com/uha-fr/archiweb_2025_projets_gr03",
         "deadline": "2025-05-12T23:59:00"
     },
-
-
-    "TD2": {
-        "repo": "https://github.com/uha-fr/archiweb_2025_tds_gr1_ndeye-coumba.diagne_webapp",
+    "2": {
+        "repo": "Projet-GIT",
         "deadline": "2025-05-12T23:59:00"
     },
-
-    "TD3": {
-        "repo": "https://github.com/uha-fr/archiweb_2025_projets_gr03.git",
+    "3": {
+        "repo": "https://github.com/uha-fr/archiweb_2025_projets_gr03_front",
         "deadline": "2025-05-12T23:59:00"
     }
-
-
 }

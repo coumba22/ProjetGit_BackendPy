@@ -18,7 +18,7 @@ g = Github(os.getenv("GITHUB_TOKEN"))
 @indicateurs_api.route('/export/pdf', methods=['GET'])
 def export_pdf():
     os.makedirs("static", exist_ok=True)
-    data = requests.get("http://127.0.0.1:5000/api/indicateurs").json()
+    data = requests.get("http://127.0.0.1:4000/api/indicateurs").json()
 
     pdf = FPDF()
     pdf.add_page()
@@ -79,12 +79,19 @@ def indicateurs_groupes():
 
 @indicateurs_api.route('/indicateurs', methods=['GET'])
 def indicateurs():
+    print(f"Hello")
     tds = lire_tds()
     resultats = {}
+    
+
+    for nom_td, infos in tds.items():
+        name = infos["repo"].replace("https://github.com/", "")
+        resultats[name] = name
 
     for nom_td, infos in tds.items():
         try:
             repo = g.get_repo(infos["repo"].replace("https://github.com/", ""))
+            
             commits = repo.get_commits()
             deadline = infos["deadline"]
 

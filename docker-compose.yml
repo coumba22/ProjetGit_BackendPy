@@ -1,0 +1,45 @@
+services:
+
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile.flask
+    restart: always
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env  
+    working_dir: /app
+    command: /bin/sh -c "python main.py"
+
+
+  archeologist-db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: archeologist
+      POSTGRES_PASSWORD: archeologist_password
+      POSTGRES_DB: archeologist_db
+    volumes:
+      - archeologist-data:/var/lib/postgresql/data
+
+
+  archeologist:
+    build:
+      context: ./archeologist/backend  # ici, ce dossier peut même être vide ou inexistant localement
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - archeologist-db
+    ports:
+      - "3000:3000"
+    environment:
+      
+    working_dir: /app/backend
+    command: /bin/sh -c "npm install && npm start"
+
+
+
+
+volumes:
+  archeologist-data:

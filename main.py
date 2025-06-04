@@ -31,7 +31,7 @@ app.register_blueprint(auth, url_prefix='/auth')
 app.register_blueprint(github_api, url_prefix='/api')
 app.register_blueprint(stats_api, url_prefix='/api')
 app.register_blueprint(indicateurs_api, url_prefix='/api')
-app.register_blueprint(gitstats_api)
+app.register_blueprint(gitstats_api, url_prefix='/api')
 
 
 @app.route('/')
@@ -48,4 +48,4 @@ def analyze_repos():
         return jsonify({"error": f"Erreur lors de l'analyse : {str(e)}"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=4000)

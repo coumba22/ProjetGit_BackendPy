@@ -11,6 +11,7 @@ from flask_cors import CORS
 from app.routes.gitstats import gitstats_api
 
 from app.routes.stats2 import StatsAPI
+from app.routes.audit import AuditAPI
 from app.utils.dir_manager import DirManager
 
 
@@ -34,7 +35,7 @@ def create_app():
     #api.add_resource(AuthAPI, '/api/auth')
     #api.add_resource(GithubAPI, '/api/github')
     api.add_resource(StatsAPI, '/api/stats')
-    #api.add_resource(AuditAPI, '/api/audit')
+    api.add_resource(AuditAPI, '/api/audit')
     api.add_resource(DirManager, '/api/clone')
     #api.add_resource(IndicateursAPI, '/api/indicateurs')
     #api.add_resource(GitstatsAPI, '/api/gitstats')

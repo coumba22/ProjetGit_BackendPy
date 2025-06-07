@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from github import Github
-from app.utils import lire_repos
+from app.utils.utils import Utils
 import os
 from collections import defaultdict
 from dotenv import load_dotenv
@@ -56,7 +56,7 @@ commit_stats = defaultdict(lambda: {
 
 def get_commits_for_repos(token):
     g = Github(token)
-    repos = lire_repos()
+    repos = Utils.lire_repos()
 
     for repo in repos:
         owner = repo.get("owner")

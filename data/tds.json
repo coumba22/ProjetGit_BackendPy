@@ -1,0 +1,24 @@
+[{
+        "nom": "Barvooo",
+        "repo_url": "https://github.com/uha-fr/endyear_2025_gr01_mobileapp.git",
+        "deadline": "18:00",
+        "token": ""
+    },
+    {
+        "nom": "Assil",
+        "repo_url": "https://github.com/uha-fr/archiweb_2025_projets_gr02",
+        "deadline": "18:00",
+        "token": ""
+    },
+
+    {
+        "nom": "Coumba Diagne",
+        "repo_url": "https://github.com/uha-fr/archiweb_2025_tds_gr1_pauline.blavy_webapp",
+        "deadlines": {
+            "2025-01-07": "17:00",
+            "2025-03-14": "18:00",
+            "2025-03-21": "19:00"
+        },
+        "token": ""
+    }
+]

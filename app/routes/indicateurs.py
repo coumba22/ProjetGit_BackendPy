@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, send_file
 from github import Github
-from app.utils import lire_tds
+from app.utils.utils2 import lire_tds
 import os
 from dotenv import load_dotenv
-from app.utils import lire_groupes
+from app.utils.utils2 import lire_groupes
 from fpdf import FPDF
 import requests
 

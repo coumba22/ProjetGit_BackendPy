@@ -1,5 +1,5 @@
 from github import Github
-from app.utils import lire_repos  # fonction qui lit repos.json
+from app.utils.utils import lire_repos  # fonction qui lit repos.json
 
 import os
 from dotenv import load_dotenv

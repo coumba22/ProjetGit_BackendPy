@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from github import Github
-from app.utils import lire_repos
+from app.utils.utils2 import lire_repos
 import os
 from dotenv import load_dotenv
 

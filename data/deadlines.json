@@ -1,0 +1,14 @@
+{
+  "IM_deadlines": [
+    { "event_date": "2025-01-07", "event_time": "17:00", "description": "Deadline TD1 IM" },
+    { "event_date": "2025-03-14", "event_time": "18:00", "description": "Deadline TD2 IM" }
+  ],
+  "MIAGE_deadlines": [
+    { "event_date": "2025-01-10", "event_time": "17:00", "description": "Deadline TD1 MIAGE" },
+    { "event_date": "2025-03-17", "event_time": "18:00", "description": "Deadline TD2 MIAGE" }
+  ],
+  "project_deadlines": [
+    { "event_date": "2025-03-21", "event_time": "19:00", "description": "Deadline Projet Final" },
+    { "event_date": "2025-04-10", "event_time": "10:00", "description": "Soutenance Projets" }
+  ]
+}

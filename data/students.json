@@ -1,0 +1,10 @@
+[
+  { "surname": "Doe", "name": "Alice", "no_etudiant": "12345678", "class": "MIAGE-FI", "git_usernames": ["alice.doe"], "years": [2023, 2024] },
+  { "surname": "Smith", "name": "Bob", "no_etudiant": "98765432", "class": "IM", "git_usernames": ["bob.smith"], "years": [2025] },
+  { "surname": "Blavy", "name": "Pauline", "no_etudiant": "30000001", "class": "MIAGE-FI", "git_usernames": ["PaulinHehe"], "years": [2025] },
+  { "surname": "Rathier", "name": "Sylia", "no_etudiant": "30000002", "class": "MIAGE-FI", "git_usernames": ["sylia.rathier", "SyliaRathier"], "years": [2025] },
+  { "surname": "Zait", "name": "Wafa", "no_etudiant": "30000003", "class": "MIAGE-FI", "git_usernames": ["wafa.zait", "Wafa987"], "years": [2025] },
+  { "surname": "Diagne", "name": "Coumba", "no_etudiant": "30000004", "class": "MIAGE-FI", "git_usernames": ["Coumba22"], "years": [2025] },
+  { "surname": "Barvooo_Surname", "name": "Barvooo", "no_etudiant": "TBD00001", "class": "MIAGE-FI", "git_usernames": ["BarvoooGit"], "years": [2025] },
+  { "surname": "Assil_Surname", "name": "Assil", "no_etudiant": "TBD00002", "class": "IM", "git_usernames": ["AssilGit"], "years": [2025] }
+]

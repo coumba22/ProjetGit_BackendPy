@@ -29,8 +29,9 @@ const app = express();
 app.use(express.json());
 
 
-const sinceDate = "2025-01-01";
-const untilDate = new Date().toISOString().slice(0, 10);
+const sinceDate = "2025-01-29";
+const untilDate = "2025-02-05";
+//const untilDate = new Date().toISOString().slice(0, 10);
 
 
 
@@ -89,8 +90,6 @@ async function initializeDatabase() {
       -- Ensure the pgvector and pgvectorscale extensions are installed
       CREATE EXTENSION IF NOT EXISTS vector;
       CREATE EXTENSION IF NOT EXISTS vectorscale;
-
-      DROP TABLE code_analysis CASCADE;
 
       CREATE TABLE IF NOT EXISTS code_analysis (
         id BIGSERIAL PRIMARY KEY,
@@ -1180,7 +1179,7 @@ app.post('/api/analyze', async (req, res) => {
 
     console.log(`Running fetchBlameAllBranches from ${sinceDate} to ${untilDate}`);
     const blameByDay = await fetchBlameAllBranches(owner, repo, local);
-    console.log('BlameByDay to store:', JSON.stringify(blameByDay).slice(0, 200), '...'); // juste un aperçu
+    console.log('BlameByDay to store:', JSON.stringify(blameByDay).slice(0, 100), '...'); // juste un aperçu
 
 
     const analysis = await pool.query(
@@ -1218,6 +1217,12 @@ app.post('/api/analyze', async (req, res) => {
     const analysisId = analysis.rows[0].id;
     req.session.analysisId = analysisId;
 
+    const { rows } = await pool.query(
+      'SELECT blame_by_day FROM code_analysis WHERE id = $1',
+      [analysisId]
+    );
+    console.log('BlameByDay stored:', JSON.stringify(rows[0].blame_by_day).slice(0, 100), '...'); // juste un aperçu
+
     req.session.save(err => {
       if (err) {
         console.error('Session save error:', err);
@@ -1229,6 +1234,7 @@ app.post('/api/analyze', async (req, res) => {
         message: 'Analysis completed successfully',
         analysisId,
         totalCommits,
+        blameByDay
       });
     });
   } catch (error) {
@@ -1348,7 +1354,7 @@ app.get('/api/contributor-statistics', validateSession, async (req, res) => {
   try {
     const { rows } = await pool.query(
       'SELECT contributors FROM code_analysis WHERE id = $1',
-      [req.analysisId]
+      [req.query.analysisId]
     );
     if (!rows[0]?.contributors) {
       return res.status(404).json({ error: 'No contributor data found' });
@@ -1365,11 +1371,12 @@ app.get('/api/blame-evolution', validateSession, async (req, res) => {
   try {
     const { rows } = await pool.query(
       'SELECT blame_by_day FROM code_analysis WHERE id = $1',
-      [req.analysisId]
+      [req.query.analysisId]
     );
     if (!rows[0]?.blame_by_day) {
       return res.status(404).json({ error: 'No blame data found' });
     }
+    console.log('BlameByDay retrieved :', JSON.stringify(rows[0].blame_by_day).slice(0, 200), '...'); // juste un aperçu
     res.json({ status: 'success', data: rows[0].blame_by_day });
   } catch (error) {
     console.error('Error fetching blames :', error);

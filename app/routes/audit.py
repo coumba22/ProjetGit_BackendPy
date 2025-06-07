@@ -129,43 +129,7 @@ class AuditAPI(Resource):
             pct = round(100 * info["total"] / total_changed, 2) if total_changed > 0 else 0.0
             info["percent"] = pct
 
-        # Création dossier images
-        os.makedirs("static/images", exist_ok=True)
-
-        # Graph Commits
-        try:
-            fig, ax = plt.subplots(figsize=(8,4))
-            ax.bar(commits_par_auteur.keys(), commits_par_auteur.values(), color='skyblue')
-            ax.set_title("Commits par auteur")
-            ax.tick_params(axis='x', rotation=45)
-            plt.tight_layout()
-            p = f"static/images/{base_name}_commits.png"
-            plt.savefig(p); plt.close(fig)
-            graph_url = p.replace("\\", "/")
-        except:
-            graph_url = None
-
-        # Graph Évolution
-        try:
-            fig, ax = plt.subplots(figsize=(10,5))
-            for au, dates in evolution_par_auteur.items():
-                xs = sorted(dates)
-                ys = [dates[d] for d in xs]
-                dx = [datetime.strptime(d, "%Y-%m-%d") for d in xs]
-                ax.plot(dx, ys, marker='o', label=au)
-            if deadline:
-                dl = datetime.strptime(deadline, "%Y-%m-%d")
-                ax.axvline(dl, color='black', linestyle='--', label='Deadline')
-            ax.set_title("Évolution temporelle")
-            ax.set_xlabel("Date"); ax.set_ylabel("Commits")
-            ax.tick_params(axis='x', rotation=45)
-            ax.legend()
-            plt.tight_layout()
-            p2 = f"static/images/{base_name}_evolution.png"
-            plt.savefig(p2); plt.close(fig)
-            evolution_url = p2.replace("\\", "/")
-        except:
-            evolution_url = None
+        
 
         fichiers_critiques = fichiers_modifies.most_common(5)
 
@@ -193,13 +157,14 @@ class AuditAPI(Resource):
             print("❌ Erreur nettoyage :", e)'''
 
         return {
-            "total_commits":          sum(commits_par_auteur.values()),
-            "commits_par_auteur":     dict(commits_par_auteur),
-            "contributions":          contributions,
-            "fichiers_critiques":     fichiers_critiques,
-            "complexites":            complexites,
-            "co_modification":        {f: dict(a) for f,a in co_modification.items()},
-            "graph_url":              graph_url,
-            "evolution_url":          evolution_url
-            #"gitstats_url":           gitstats_url
+            "base_name":                base_name,
+            "deadline":                 deadline,
+            "total_commits":            sum(commits_par_auteur.values()),
+            "commits_par_auteur":       dict(commits_par_auteur),
+            "contributions":            contributions,
+            "fichiers_critiques":       fichiers_critiques,
+            "complexites":              complexites,
+            "co_modification":          {f: dict(a) for f,a in co_modification.items()},
+            "evolution_par_auteur":     evolution_par_auteur
+            #"gitstats_url":            gitstats_url
         }

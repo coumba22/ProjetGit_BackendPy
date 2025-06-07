@@ -1,16 +1,22 @@
-import http from 'http';
+/*import http from 'http';
 import { tmpdir } from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 import simpleGit from 'simple-git';
+import { request } from 'http';
+import axios from 'axios';
 
 const port = process.env.PORT || 3000;
+const CLONE_API_HOST = 'web';
+const CLONE_API_PORT = 5000;
+const ANALYZE_API_URL = 'http://localhost:3000/api/analyze';
 
 const server = http.createServer(async (req, res) => {
-  if (req.method === "POST" && req.url === "/analyze") {
+  if (req.method === "POST" && req.url === "/analyze-archeologist") {
     let body = "";
     req.on("data", chunk => { body += chunk; });
     req.on("end", async () => {
+      console.log("Received analyze request:", body);
       try {
         const { repo_url } = JSON.parse(body);
         if (!repo_url) {
@@ -18,44 +24,28 @@ const server = http.createServer(async (req, res) => {
           res.end(JSON.stringify({ error: "repo_url is required" }));
           return;
         }
+        /*const { clone_path } = JSON.parse(body);
+        if (!clone_path) {
+          clone_path = cloneOrUpdateRepo(repo_url);
+          return;
+        }*/
 
-        const repoDir = path.join(tmpdir(), `repo_${Date.now()}`);
-        await fs.mkdirp(repoDir);
+        // 2. Poursuivre analyse sur clonePath
+        /*const repoGit = simpleGit(clone_path);
 
-        const git = simpleGit();
 
-        const token = process.env.GITHUB_TOKEN; // stocke ton token dans une variable d'environnement
-        const repoUrlWithToken = repo_url.replace(
-          'https://github.com/',
-          `https://${token}@github.com/`
-        );
-
-        await git.clone(repoUrlWithToken, repoDir);
-
-        const repoGit = simpleGit(repoDir);
-
-        // Assure un clone complet, pas shallow
-        await ensureFullClone(repoDir);
-
-        // Récupérer toutes les branches distantes (ex: origin/main, origin/dev ...)
         const branchSummary = await repoGit.branch(['-r']);
         const remoteBranches = Object.keys(branchSummary.branches).filter(b => b.startsWith('origin/') && !b.endsWith('HEAD'));
 
-        // Map pour stocker les commits uniques, clé = sha
         const commitsMap = new Map();
 
         for (const remoteBranch of remoteBranches) {
-          // Checkout sur la branche distante en local
-          // Création d'une branche locale temporaire pointant sur la branche distante
           const localBranch = remoteBranch.replace('origin/', 'tmp-branch-');
-          // Supprimer la branche locale si existe déjà (pour être safe)
           try { await repoGit.deleteLocalBranch(localBranch, true); } catch {}
 
           await repoGit.checkoutBranch(localBranch, remoteBranch);
 
-          // Récupérer commits de cette branche (limitons à 150 derniers)
           const log = await repoGit.log({ maxCount: 150 });
-
           log.all.forEach(c => {
             if (!commitsMap.has(c.hash)) {
               commitsMap.set(c.hash, {
@@ -70,23 +60,17 @@ const server = http.createServer(async (req, res) => {
 
         const commits = Array.from(commitsMap.values());
 
-        // Compte commits par auteur
         const contributorsCount = {};
         commits.forEach(c => {
           contributorsCount[c.author] = (contributorsCount[c.author] || 0) + 1;
         });
         const contributors = Object.entries(contributorsCount).map(([name, commits]) => ({ name, commits }));
 
-        // Calcul des changements sur fichiers cumulés sur tous les commits
         let file_changes = {};
         for (const commit of commits) {
           const parentsRaw = await repoGit.raw(['rev-list', '--parents', '-n', '1', commit.sha]);
           const parts = parentsRaw.trim().split(' ');
-
-          if (parts.length < 2) {
-            // Commit racine, pas de parent, on ignore diff
-            continue;
-          }
+          if (parts.length < 2) continue;
           const parentSha = parts[1];
 
           const diffSummary = await repoGit.diffSummary([parentSha, commit.sha]);
@@ -95,20 +79,30 @@ const server = http.createServer(async (req, res) => {
           });
         }
 
-        // Cleanup
-        await fs.remove(repoDir);
-
         const analysisData = {
+          clone_path,
           repo_url,
           status: "completed",
           commits,
           contributors,
           file_changes,
           analyzed_at: new Date().toISOString()
+        };*/
+
+         // Appel HTTP vers /api/analyze dans app.mjs
+        /*const analyzeResponse = await axios.post(ANALYZE_API_URL, { repoUrl: repo_url });
+
+        const responseData = {
+          repo_url,
+          //clone_path,
+          status: analyzeResponse.data.status || "completed",
+          analyzed_at: new Date().toISOString(),
+          results: analyzeResponse.data,
         };
 
+
         res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(analysisData));
+        res.end(JSON.stringify(responseData));
 
       } catch (error) {
         console.error('Analyse error:', error);
@@ -123,17 +117,53 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Archeologist server listening on port ${port}`);
+  console.log(`Hein ${port}`);
 });
 
-async function ensureFullClone(repoPath) {
-  const git = simpleGit(repoPath);
-  const isShallow = await git.revparse(['--is-shallow-repository']);
-  if (isShallow === 'true') {
-    console.log('Shallow repository detected, fetching full history...');
-    await git.fetch(['--unshallow']);
-    console.log('Full history fetched.');
-  } else {
-    console.log('Repository is already complete.');
-  }
-}
+
+//Forcer le clonage ou la mise à jour du dépôt
+// en appelant l'API Python
+function cloneOrUpdateRepo(repo_url) {
+  return new Promise((resolve, reject) => {
+    const postData = JSON.stringify({ repo_url });
+
+    const options = {
+      hostname: CLONE_API_HOST,
+      port: CLONE_API_PORT,
+      path: '/api/clone',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData),
+      },
+    };
+
+    const req = request(options, (res) => {
+      let data = "";
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          try {
+            const parsed = JSON.parse(data);
+            if (!parsed.clone_path) {
+              reject(new Error("Response from /api/clone missing clone_path"));
+              return;
+            }
+            resolve(parsed.clone_path);
+          } catch (e) {
+            reject(e);
+          }
+        } else {
+          reject(new Error(`Failed to clone repo: ${res.statusCode} ${res.statusMessage}`));
+        }
+      });
+    });
+
+    req.on('error', (err) => {
+      reject(err);
+    });
+
+    req.write(postData);
+    req.end();
+  });
+}*/
